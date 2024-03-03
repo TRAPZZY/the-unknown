@@ -14,11 +14,16 @@ server_ip, server_port = link.replace("https://", "").split(":")
 # Set up the client
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ssl_context = ssl.create_default_context()
+
+# Disable certificate verification (for testing with self-signed certificates)
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
 ssl_socket = ssl_context.wrap_socket(client_socket, server_hostname=server_ip)
 ssl_socket.connect((server_ip, int(server_port)))
 
 # Encrypt and send a message
-message = "Hello, secure world!"
+message = "Hello, secure world!.... this script was created by trappzy a man like God!"
 encrypted_message = cipher_suite.encrypt(message.encode("utf-8"))
 ssl_socket.send(encrypted_message)
 print(f"Sent encrypted message: {encrypted_message}")
